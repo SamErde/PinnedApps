@@ -32,10 +32,9 @@ function Remove-AppPin {
     } # end begin block
 
     process {
-        $NamespaceName = 'Shell.Application'
-        $Shell = New-Object -ComObject $NamespaceName
+        $Shell = New-Object -ComObject 'Shell.Application'
         $AppsFolder = $Shell.NameSpace('shell:AppsFolder')
-        $App = $AppsFolder.Items() | Where-Object { $_.Name -eq $App }
+        $Apps = $AppsFolder.Items() | Where-Object { $_.Name -eq $App }
 
         if ($App) {
             $AppVerbs = $App.Verbs()
