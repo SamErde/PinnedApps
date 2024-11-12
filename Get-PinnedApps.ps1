@@ -2,39 +2,50 @@ function Get-PinnedApps {
     [CmdletBinding()]
     param (
         # Start Menu
-        [Parameter(Mandatory, ParameterSetName = 'StartMenu')]
+        [Parameter()]
         [switch]
         $StartMenu,
 
         # Taskbar
-        [Parameter(Mandatory, ParameterSetName = 'Taskbar')]
+        [Parameter()]
         [switch]
         $TaskBar
     )
 
     switch ($PSBoundParameters.Keys) {
         'StartMenu' {
-            $Filter = 'Unpi&n from Start'
+            $Pattern = 'Unpi&n from Start'
         }
         'TaskBar' {
-            $Filter = 'Unpin from tas&kbar'
+            $Pattern = 'Unpin from tas&kbar'
+        }
+        Default {
+            $Pattern = 'Unpi[&]?n'
         }
     }
+    if (-not $Pattern) {
+        $Pattern = 'Unpi[&]?n'
+    }
+    Write-Debug -Message $Pattern
 
     $Apps = (New-Object -ComObject Shell.Application).Namespace('shell:AppsFolder').Items()
 
     [System.Collections.Generic.List[Object]]$PinnedAppList = @()
     foreach ($app in $Apps) {
         $AppVerbs = $app.Verbs()
-        $PinnedApp = $AppVerbs | Where-Object { $_.Name -eq $Filter }
+        $PinnedApp = $AppVerbs | Where-Object { $_.Name -match $Pattern }
         if ($PinnedApp) {
             $PinnedAppList.Add($App)
         }
     }
-    
+
     # Output the list of pinned apps
     $PinnedAppList # | ForEach-Object { Write-Host "Pinned app: $_" }
+    Write-Debug -Message $PinnedAppList.Name
 }
+
+$PinnedAppList = Get-PinnedApps
+$PinnedAppList.ToString()
 
 $StartMenuPinnedApps = Get-PinnedApps -StartMenu
 Write-Host "Start Menu:`n$($StartMenuPinnedApps | Select-Object Name)"
