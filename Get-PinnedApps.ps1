@@ -39,16 +39,19 @@ function Get-PinnedApps {
         }
     }
 
-    # Output the list of pinned apps
-    $PinnedAppList # | ForEach-Object { Write-Host "Pinned app: $_" }
-    Write-Debug -Message $PinnedAppList.Name
+    $PinnedAppList
 }
 
 $PinnedAppList = Get-PinnedApps
-$PinnedAppList.ToString()
+Write-Host "All Pinned Apps:" -ForegroundColor Magenta -BackgroundColor Black
+$PinnedAppList.Name
 
 $StartMenuPinnedApps = Get-PinnedApps -StartMenu
-Write-Host "Start Menu:`n$($StartMenuPinnedApps | Select-Object Name)"
+Write-Host "Apps pinned to the start menu: " -ForegroundColor Green -BackgroundColor Black -NoNewline
+Write-Host "$($StartMenuPinnedApps | Select-Object -ExpandProperty Name | Join-String -Separator ', ')" -ForegroundColor White -BackgroundColor Black -NoNewline
+Write-Host ''
 
 $TaskBarPinnedApps = Get-PinnedApps -Taskbar
-Write-Host "Taskbar:`n$($TaskBarPinnedApps | Select-Object Name)"
+Write-Host 'Apps pinned to the taskbar: ' -ForegroundColor Green -BackgroundColor Black -NoNewline
+Write-Host "$($TaskbarPinnedApps | Select-Object -ExpandProperty Name | Join-String -Separator ', ')" -ForegroundColor White -BackgroundColor Black -NoNewline
+Write-Host ''
