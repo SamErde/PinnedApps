@@ -1,4 +1,4 @@
-function Get-PinnedApps {
+function Get-PinnedApp {
     [CmdletBinding()]
     param (
         # Start Menu
@@ -41,17 +41,3 @@ function Get-PinnedApps {
 
     $PinnedAppList
 }
-
-$PinnedAppList = Get-PinnedApps
-Write-Host "All Pinned Apps:" -ForegroundColor Magenta -BackgroundColor Black
-$PinnedAppList.Name
-
-$StartMenuPinnedApps = Get-PinnedApps -StartMenu
-Write-Host "Apps pinned to the start menu: " -ForegroundColor Green -BackgroundColor Black -NoNewline
-Write-Host "$($StartMenuPinnedApps | Select-Object -ExpandProperty Name | Join-String -Separator ', ')" -ForegroundColor White -BackgroundColor Black -NoNewline
-Write-Host ''
-
-$TaskBarPinnedApps = Get-PinnedApps -Taskbar
-Write-Host 'Apps pinned to the taskbar: ' -ForegroundColor Green -BackgroundColor Black -NoNewline
-Write-Host "$($TaskbarPinnedApps | Select-Object -ExpandProperty Name | Join-String -Separator ', ')" -ForegroundColor White -BackgroundColor Black -NoNewline
-Write-Host ''
