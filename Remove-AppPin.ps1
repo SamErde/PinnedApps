@@ -1,19 +1,19 @@
-# Work in Progress. Does not successfully un-pin apps yet. Have only tried with start menu so far.
+# Work in Progress.
 # sde
 # 2024/11/12
 
 function Remove-AppPin {
     <#
         .SYNOPSIS
-        Remove a pinned app from the start menu or taskbar.
+        Remove a pinned app from the taskbar.
 
         .DESCRIPTION
-        This function will help you remove a pinned app from the start menu or task bar (or both).
+        This function will help you remove a pinned app from the taskbar.
 
         .EXAMPLE
-        Remove-AppPin -App 'Terminal' -Target StartMenu
+        Remove-AppPin -App 'Terminal'
 
-        Un-pin the Terminal app from the start menu.
+        Un-pin the Terminal app from the taskbar.
 
         .NOTES
         Author: Sam Erde
@@ -38,9 +38,9 @@ function Remove-AppPin {
 
         if ($App) {
             $AppVerbs = $App.Verbs()
-            $UnpinVerb = $AppVerbs | Where-Object { $_.Name -eq 'Unpi&n from Start' }
+            $UnpinVerb = $AppVerbs | Where-Object { $_.Name -eq 'Unpin from tas&kbar' }
             if ($UnpinVerb) {
-                $App.InvokeVerb('Unpi&n from Start')
+                $App.InvokeVerb('Unpin from tas&kbar')
             }
         }
     } # end process block
@@ -51,11 +51,11 @@ function Remove-AppPin {
 
 } # end function Remove-AppPin
 
-# Get all Start Menu apps
-$StartApps = (New-Object -ComObject Shell.Application).Namespace('shell:AppsFolder').Items()
+# Get all apps
+$Apps = (New-Object -ComObject Shell.Application).Namespace('shell:AppsFolder').Items()
 
 # Unpin each app
-foreach ($App in $StartApps) {
+foreach ($App in $Apps) {
     Remove-AppPin -AppName $App
 }
 

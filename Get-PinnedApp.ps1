@@ -1,43 +1,27 @@
 function Get-PinnedApp {
     [CmdletBinding()]
-    param (
-        # Start Menu
-        [Parameter()]
-        [switch]
-        $StartMenu,
+    param ( )
 
-        # Taskbar
-        [Parameter()]
-        [switch]
-        $TaskBar
-    )
-
-    switch ($PSBoundParameters.Keys) {
-        'StartMenu' {
-            $Pattern = 'Unpi&n from Start'
+    $Pattern = 'Unpin from tas&kbar'
+    $Apps = (New-Object -ComObject Shell.Application).Namespace('shell:AppsFolder').Items() |
+        Where-Object {
+        ($_.Verbs() | Select-Object -ExpandProperty Name) -contains $Pattern
         }
-        'TaskBar' {
-            $Pattern = 'Unpin from tas&kbar'
-        }
-        Default {
-            $Pattern = 'Unpi[&]?n'
-        }
-    }
-    if (-not $Pattern) {
-        $Pattern = 'Unpi[&]?n'
-    }
-    Write-Debug -Message $Pattern
 
-    $Apps = (New-Object -ComObject Shell.Application).Namespace('shell:AppsFolder').Items()
-
-    [System.Collections.Generic.List[Object]]$PinnedAppList = @()
+    [System.Collections.Generic.List[PSObject]]$PinnedAppList = @()
     foreach ($app in $Apps) {
-        $AppVerbs = $app.Verbs()
-        $PinnedApp = $AppVerbs | Where-Object { $_.Name -match $Pattern }
-        if ($PinnedApp) {
-            $PinnedAppList.Add($App)
+        Write-Verbose $app.Name
+        Write-Verbose $app.Path
+        $Properties = [ordered]@{
+            Name = $app.Name
+            Path = $app.Path
         }
+        $item = New-Object -TypeName psobject -Property $Properties
+        Write-Verbose $item
+        $PinnedAppList.Add($item)
     }
-
     $PinnedAppList
 }
+
+$PinnedAppList = Get-PinnedApp
+$PinnedAppList

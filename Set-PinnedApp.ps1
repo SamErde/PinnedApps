@@ -1,15 +1,15 @@
 function Set-PinnedApp {
     <#
         .SYNOPSIS
-        Pin an app to the Start Menu or Taskbar
+        Pin an app to the Windows taskbar.
 
         .DESCRIPTION
-        This function will help you pin an app to the start menu, the taskbar, or both.
+        This function will help you pin an app to the Windows taskbar.
 
         .EXAMPLE
-        Set-PinnedApp -App 'Terminal' -Target StartMenu,Taskbar
+        Set-PinnedApp -App 'Terminal'
 
-        Pin the Windows Terminal app to the start menu and the taskbar.
+        Pin the Windows Terminal app to taskbar.
 
         .NOTES
         Author: Sam Erde
@@ -23,13 +23,7 @@ function Set-PinnedApp {
         # App name or ID
         [Parameter(Mandatory)]
         [string]
-        $App,
-
-        # Target[s] to pin the app to
-        [Parameter()]
-        [ValidateSet('StartMenu', 'Taskbar')]
-        [string[]]
-        $Target
+        $App
     )
 
     begin {
